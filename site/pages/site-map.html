@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Mappa del Sito - Around Playing Cards</title>
+  <style>
+    body { background: #181818; color: #fff; font-family: 'Space Grotesk', sans-serif; margin: 0; }
+    h1 { text-align: center; color: #00bcd4; margin-top: 32px; }
+    .diagram-container { display: flex; justify-content: center; margin-top: 30px; }
+    .legend { max-width: 600px; margin: 30px auto 0 auto; color: #c0c0c0; font-size: 1.1em; }
+    a.node-link { fill: #fff; text-decoration: underline; cursor: pointer; }
+    .node-rect { fill: #222; stroke: #00bcd4; stroke-width: 2; rx: 10; }
+    .deck { stroke: #ff9800; }
+    .about { stroke: #667eea; }
+    .contact { stroke: #26c6da; }
+    .storia { stroke: #c0c0c0; }
+    .arrow { stroke: #aaa; stroke-width: 2; marker-end: url(#arrowhead); }
+  </style>
+</head>
+<body>
+  <h1>Mappa delle Connessioni del Sito</h1>
+  <div class="diagram-container">
+    <svg width="900" height="600" viewBox="0 0 900 600">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto" markerUnits="strokeWidth">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#aaa" />
+        </marker>
+      </defs>
+      <!-- Nodi -->
+      <a xlink:href="site/pages/index2.html" target="_blank">
+        <rect x="400" y="60" width="120" height="40" class="node-rect"/>
+        <text x="460" y="85" text-anchor="middle" font-size="16" class="node-link">Home</text>
+      </a>
+      <a xlink:href="site/pages/about.html" target="_blank">
+        <rect x="120" y="200" width="120" height="40" class="node-rect about"/>
+        <text x="180" y="225" text-anchor="middle" font-size="16" class="node-link">Cardistry</text>
+      </a>
+      <a xlink:href="site/pages/storia.html" target="_blank">
+        <rect x="320" y="200" width="120" height="40" class="node-rect storia"/>
+        <text x="380" y="225" text-anchor="middle" font-size="16" class="node-link">Storia</text>
+      </a>
+      <a xlink:href="site/pages/contact.html" target="_blank">
+        <rect x="520" y="200" width="120" height="40" class="node-rect contact"/>
+        <text x="580" y="225" text-anchor="middle" font-size="16" class="node-link">Contatti</text>
+      </a>
+      <a xlink:href="site/decks/silverdrop.html" target="_blank">
+        <rect x="720" y="200" width="120" height="40" class="node-rect deck"/>
+        <text x="780" y="225" text-anchor="middle" font-size="16" class="node-link">Silverdrop</text>
+      </a>
+      <a xlink:href="site/decks/flux.html" target="_blank">
+        <rect x="220" y="400" width="120" height="40" class="node-rect deck"/>
+        <text x="280" y="425" text-anchor="middle" font-size="16" class="node-link">Flux</text>
+      </a>
+      <a xlink:href="site/decks/orbit.html" target="_blank">
+        <rect x="400" y="400" width="120" height="40" class="node-rect deck"/>
+        <text x="460" y="425" text-anchor="middle" font-size="16" class="node-link">Orbit</text>
+      </a>
+      <a xlink:href="site/decks/vertex.html" target="_blank">
+        <rect x="580" y="400" width="120" height="40" class="node-rect deck"/>
+        <text x="640" y="425" text-anchor="middle" font-size="16" class="node-link">Vertex</text>
+      </a>
+      <!-- Frecce -->
+      <!-- Home -> tutte le pagine principali -->
+      <line x1="460" y1="100" x2="180" y2="200" class="arrow"/>
+      <line x1="460" y1="100" x2="380" y2="200" class="arrow"/>
+      <line x1="460" y1="100" x2="580" y2="200" class="arrow"/>
+      <line x1="460" y1="100" x2="780" y2="200" class="arrow"/>
+      <!-- Home -> Mazzi (Orbit, Flux, Vertex) -->
+      <line x1="460" y1="100" x2="280" y2="400" class="arrow"/>
+      <line x1="460" y1="100" x2="460" y2="400" class="arrow"/>
+      <line x1="460" y1="100" x2="640" y2="400" class="arrow"/>
+      <!-- Silverdrop -> Home (menu) -->
+      <line x1="780" y1="240" x2="460" y2="100" class="arrow"/>
+      <!-- Orbit, Flux, Vertex -> Home (menu) -->
+      <line x1="280" y1="440" x2="460" y2="100" class="arrow"/>
+      <line x1="460" y1="440" x2="460" y2="100" class="arrow"/>
+      <line x1="640" y1="440" x2="460" y2="100" class="arrow"/>
+      <!-- Orbit, Flux, Vertex <-> Silverdrop (menu Mazzi) -->
+      <line x1="280" y1="440" x2="780" y2="240" class="arrow"/>
+      <line x1="460" y1="440" x2="780" y2="240" class="arrow"/>
+      <line x1="640" y1="440" x2="780" y2="240" class="arrow"/>
+      <!-- Orbit <-> Flux <-> Vertex (tra loro) -->
+      <line x1="280" y1="440" x2="460" y2="440" class="arrow"/>
+      <line x1="460" y1="440" x2="640" y2="440" class="arrow"/>
+    </svg>
+  </div>
+  <div class="legend">
+    <p>Questo diagramma rappresenta le connessioni tra le principali pagine del sito Around Playing Cards.<br>
+    Ogni rettangolo è una pagina, ogni freccia rappresenta un collegamento diretto (ad esempio dal menu o tra le pagine dei mazzi).<br>
+    Clicca su un nodo per aprire la pagina corrispondente in una nuova scheda.</p>
+  </div>
+</body>
+</html>

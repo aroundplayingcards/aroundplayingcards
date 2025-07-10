@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contatti | Around Playing Cards</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-color: #000;
+      --text-color: #fff;
+      --accent-color: #c0c0c0;
+      --radius: 12px;
+      --transition: 0.4s ease;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 40px; background: rgba(0,0,0,0.8);
+      position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(8px);
+    }
+    .logo { font-size: 1.5rem; font-weight: 700; text-transform: uppercase; }
+    nav a {
+      color: var(--text-color); margin-left: 30px; text-decoration: none; position: relative; transition: color var(--transition);
+    }
+    nav a::after {
+      content: ''; position: absolute; bottom: -5px; left: 0;
+      width: 0; height: 2px; background: var(--accent-color);
+      transition: width var(--transition);
+    }
+    nav a:hover { color: #ffe082; }
+    nav a:hover::after { width: 100%; }
+    .hero {
+      padding: 80px 20px 30px;
+      background: linear-gradient(120deg, #0a0a0a, #111);
+      text-align: center;
+      box-shadow: 0 8px 48px #0005;
+      border-bottom: 2px solid #ffe08233;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      color: #ffe082;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 16px #000a;
+    }
+    .hero p {
+      color: #fff;
+      opacity: 0.85;
+      text-shadow: 0 1px 8px #0008;
+    }
+    .contact-section {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: 0 auto 40px auto;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .info div {
+      background: #111;
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 16px #ffe08222;
+      border: 1.5px solid #ffe08222;
+    }
+    .info h3 {
+      margin-bottom: 0.5rem;
+      color: #ffe082;
+    }
+    .info a { color: #ffe082; text-decoration: none; }
+    .info a:hover { text-decoration: underline; }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #c0c0c0;
+    }
+    .form-control {
+      width: 100%;
+      padding: 1rem;
+      border-radius: var(--radius);
+      border: 1.5px solid #ffe08244;
+      background: #1a1a1a;
+      color: var(--text-color);
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+    .form-control:focus {
+      border: 2px solid #ffe082;
+      box-shadow: 0 2px 12px #ffe08244;
+      outline: none;
+    }
+    .btn {
+      background: linear-gradient(90deg,#ffe082,#c0c0c0 80%);
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: var(--radius);
+      font-weight: bold;
+      cursor: pointer;
+      color: #000;
+      box-shadow: 0 2px 12px #ffe08244;
+      letter-spacing: 0.5px;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover {
+      background: linear-gradient(90deg,#fffbe0,#ffe082 80%);
+      color: #000;
+      box-shadow: 0 4px 24px #ffe08255;
+    }
+    #contactMsgBox {
+      margin-top: 10px;
+      font-size: 1em;
+      min-height: 1.5em;
+      color: #ffe082;
+    }
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 0.9rem;
+      opacity: 0.6;
+      background: #000;
+      color: #aaa;
+      border-radius: 0 0 22px 22px !important;
+    }
+    canvas#fluid-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100vw;
+      height: 100vh;
+      opacity: 0.7;
+      pointer-events: none;
+      filter: blur(1.5px) brightness(1.2) saturate(1.5);
+      transition: opacity 0.3s;
+    }
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 400px;
+      height: 100vh;
+      background: #181818;
+      color: #fff;
+      box-shadow: -4px 0 24px rgba(0,0,0,0.25);
+      z-index: 2000;
+      transition: right 0.3s cubic-bezier(.4,0,.2,1);
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      border-radius: 22px 0 0 22px !important;
+    }
+    .cart-sidebar.active {
+      right: 0;
+      display: flex !important;
+    }
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 24px 12px 24px;
+      border-bottom: 1px solid #333;
+    }
+    .close-cart-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .close-cart-btn:hover {
+      color: #c0c0c0;
+    }
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 24px;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid #222;
+      padding-bottom: 12px;
+    }
+    .cart-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #222;
+    }
+    .cart-item-info {
+      flex: 1;
+    }
+    .cart-item-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .cart-item-price {
+      color: #c0c0c0;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+    .cart-item-qty {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .qty-btn {
+      background: #222;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      width: 28px;
+      height: 28px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .qty-btn:hover {
+      background: #c0c0c0;
+      color: #000;
+    }
+    .remove-item-btn {
+      background: none;
+      border: none;
+      color: #ff5252;
+      font-size: 1.2rem;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+    .cart-footer {
+      padding: 18px 24px;
+      border-top: 1px solid #333;
+      background: #181818;
+    }
+    .cart-total {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .checkout-btn {
+      width: 100%;
+      padding: 14px;
+      background: #c0c0c0;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .checkout-btn:hover {
+      background: #fff;
+    }
+    .cart-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.45);
+      z-index: 1999;
+      transition: opacity 0.3s;
+    }
+    .cart-overlay.active {
+      display: block;
+    }
+    @media (max-width: 900px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="fluid-bg"></canvas>
+  <header>
+    <div class="logo">AroundCards</div>
+    <nav>
+      <a href="index2.html">Home</a>
+      <a href="index2.html#mazzi">Mazzi</a>
+      <a href="about.html">Cardistry</a>
+      <a href="storia.html">Storia</a>
+      <a href="contact.html">Contatti</a>
+      <a href="#" id="cart-icon"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Contattaci</h1>
+    <p>Siamo felici di rispondere alle tue domande</p>
+  </section>
+
+  <section class="contact-section">
+    <div class="contact-grid">
+      <div class="info">
+        <div>
+          <h3>Indirizzo</h3>
+          <p>Via della Cardistry, 42<br>00100 Roma, Italia</p>
+        </div>
+        <div>
+          <h3>Email</h3>
+          <p><a href="mailto:info@aroundcards.com">info@aroundcards.com</a></p>
+        </div>
+        <div>
+          <h3>Telefono</h3>
+          <p><a href="tel:+391234567890">+39 123 4567890</a></p>
+        </div>
+        <div>
+          <h3>Social</h3>
+          <p>
+            <a href="https://instagram.com/aroundcards" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+            &nbsp;|&nbsp;
+            <a href="https://facebook.com/aroundcards" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+          </p>
+        </div>
+      </div>
+      <form id="contactForm" autocomplete="off">
+        <div class="form-group">
+          <label class="form-label" for="name">Nome</label>
+          <input type="text" class="form-control" id="name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input type="email" class="form-control" id="email" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="msg">Messaggio</label>
+          <textarea rows="5" class="form-control" id="msg" required></textarea>
+        </div>
+        <button class="btn" type="submit">Invia</button>
+        <div id="contactMsgBox"></div>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 AroundPlayingCards.com | Tutti i diritti riservati</p>
+  </footer>
+  <div id="cartSidebar" class="cart-sidebar">
+    <div class="cart-header">
+      <h3>Il tuo carrello</h3>
+      <button id="closeCart" class="close-cart-btn" aria-label="Chiudi carrello">&times;</button>
+    </div>
+    <div class="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total">Totale: <span id="cartTotal">€0.00</span></div>
+      <button id="checkoutBtn" class="checkout-btn">Procedi all'acquisto</button>
+    </div>
+  </div>
+  <div id="cartOverlay" class="cart-overlay"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <script>
+    // Animazione canvas che segue il mouse
+    const canvas = document.getElementById('fluid-bg');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    let t = 0;
+    let mouse = {x: width/2, y: height/2};
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+    function drawFluid() {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < 180; i++) {
+        // Direzione influenzata dal mouse
+        const dx = (mouse.x - width/2) * 0.12;
+        const dy = (mouse.y - height/2) * 0.12;
+        const x = Math.sin(i + t * 0.004) * (200 + 40*Math.sin(t*0.01)) + width / 2 + dx;
+        const y = Math.cos(i + t * 0.002) * (160 + 30*Math.cos(t*0.012)) + height / 2 + dy;
+        const r = Math.floor(180 + 60 * Math.sin(i * 0.13 + t * 0.02));
+        const g = Math.floor(120 + 100 * Math.cos(i * 0.11 + t * 0.018));
+        const b = Math.floor(200 + 40 * Math.sin(i * 0.09 + t * 0.021));
+        ctx.fillStyle = `rgba(${r},${g},${b},0.13)`;
+        ctx.beginPath();
+        ctx.arc(x, y, 70 + 10*Math.sin(i+t*0.01), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      t++;
+      requestAnimationFrame(drawFluid);
+    }
+    drawFluid();
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+    // Carrello sidebar condiviso
+    const cartSidebar = document.getElementById('cartSidebar');
+    const cartOverlay = document.getElementById('cartOverlay');
+    const cartCountEl = document.getElementById('cart-count');
+    const closeCartBtn = document.getElementById('closeCart');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const cartItemsContainer = document.querySelector('.cart-items');
+    const cartTotalEl = document.getElementById('cartTotal');
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    function openCart() {
+      cartSidebar.classList.add('active');
+      cartOverlay.classList.add('active');
+    }
+    function closeCart() {
+      cartSidebar.classList.remove('active');
+      cartOverlay.classList.remove('active');
+    }
+    document.getElementById('cart-icon').addEventListener('click', e => {
+      e.preventDefault();
+      openCart();
+    });
+    closeCartBtn.addEventListener('click', closeCart);
+    cartOverlay.addEventListener('click', closeCart);
+    function updateCartCount() {
+      let count = cart.reduce((sum, item) => sum + item.qty, 0);
+      cartCountEl.textContent = count;
+    }
+    function updateCartTotal() {
+      let total = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
+      cartTotalEl.textContent = '€' + total.toFixed(2);
+    }
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+    function renderCart() {
+      cartItemsContainer.innerHTML = '';
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p style="color:#aaa">Il carrello è vuoto.</p>';
+        return;
+      }
+      cart.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <div class="cart-item-info">
+            <div class="cart-item-title">${item.name}</div>
+            <div class="cart-item-price">€${item.price.toFixed(2)}</div>
+            <div class="cart-item-qty">
+              <button class="qty-btn" data-idx="${idx}" data-action="dec">-</button>
+              <span>${item.qty}</span>
+              <button class="qty-btn" data-idx="${idx}" data-action="inc">+</button>
+              <button class="remove-item-btn" data-idx="${idx}" title="Rimuovi">&times;</button>
+            </div>
+          </div>
+        `;
+        cartItemsContainer.appendChild(div);
+      });
+      cartItemsContainer.querySelectorAll('.qty-btn').forEach(btn => {
+        btn.onclick = function() {
+          const idx = +btn.dataset.idx;
+          if (btn.dataset.action === 'inc') cart[idx].qty++;
+          else if (btn.dataset.action === 'dec' && cart[idx].qty > 1) cart[idx].qty--;
+          saveCart();
+          renderCart();
+          updateCartCount();
+          updateCartTotal();
+        };
+      });
+      cartItemsContainer.querySelectorAll('.remove-item-btn').forEach(btn => {
+        btn.onclick = function() {
+          const idx = +btn.dataset.idx;
+          cart.splice(idx, 1);
+          saveCart();
+          renderCart();
+          updateCartCount();
+          updateCartTotal();
+        };
+      });
+    }
+    function addToCart(product) {
+      const found = cart.find(item => item.id === product.id);
+      if (found) {
+        found.qty++;
+      } else {
+        cart.push({...product, qty: 1});
+      }
+      saveCart();
+      renderCart();
+      updateCartCount();
+      updateCartTotal();
+      openCart();
+    }
+    // Inizializzazione
+    renderCart();
+    updateCartCount();
+    updateCartTotal();
+    document.getElementById('contactForm').onsubmit = function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const msg = document.getElementById('msg').value.trim();
+      const msgBox = document.getElementById('contactMsgBox');
+      if(name && email && msg && email.includes('@')) {
+        msgBox.textContent = 'Messaggio inviato! Ti risponderemo presto.';
+        document.getElementById('contactForm').reset();
+      } else {
+        msgBox.textContent = 'Compila tutti i campi con dati validi.';
+      }
+    };
+  </script>
+</body>
+</html>
